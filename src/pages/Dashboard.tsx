@@ -5,6 +5,7 @@ import WeatherMonitoring from '@/components/dashboard/WeatherMonitoring';
 import CropHealthAnalyzer from '@/components/dashboard/CropHealthAnalyzer';
 import IrrigationRecommendations from '@/components/dashboard/IrrigationRecommendations';
 import AIRecommendations from '@/components/dashboard/AIRecommendations';
+import { SmartAgriAI } from '@/components/dashboard/SmartAgriAI';
 
 export default function Dashboard() {
   return (
@@ -69,6 +70,9 @@ export default function Dashboard() {
             <WeatherMonitoring />
             <IrrigationRecommendations />
           </div>
+
+          {/* Smart Agriculture AI System with Language Support */}
+          <SmartAgriAI />
 
           {/* AI Recommendations */}
           <AIRecommendations />

@@ -6,38 +6,66 @@ Deno.serve(async (req) => {
   }
 
   try {
-    const { lat, lon } = await req.json();
+    const { latitude, longitude } = await req.json();
 
-    if (!lat || !lon) {
-      throw new Error("GPS coordinates required.");
+    if (!latitude || !longitude) {
+      throw new Error("Latitude and longitude are required");
     }
 
     const apiKey = Deno.env.get("OPENWEATHER_API_KEY");
+    
+    if (!apiKey) {
+      throw new Error("OPENWEATHER_API_KEY environment variable not set");
+    }
 
-    const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`;
+    // Fetch current weather data
+    const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${apiKey}&units=metric`;
+    const weatherResponse = await fetch(weatherUrl);
 
-    const response = await fetch(url);
-
-    if (!response.ok) {
-      const text = await response.text();
+    if (!weatherResponse.ok) {
+      const text = await weatherResponse.text();
       throw new Error(`OpenWeather error: ${text}`);
     }
 
-    const json = await response.json();
+    const weatherData = await weatherResponse.json();
+
+    // Fetch forecast for rain chance
+    const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=${apiKey}&units=metric`;
+    const forecastResponse = await fetch(forecastUrl);
+    
+    let rainChance = 0;
+    if (forecastResponse.ok) {
+      const forecastData = await forecastResponse.json();
+      // Calculate rain probability from next 24 hours
+      const next24Hours = forecastData.list.slice(0, 8); // 8 x 3-hour intervals
+      const rainyPeriods = next24Hours.filter((period: any) => 
+        period.weather[0].main === 'Rain' || period.weather[0].main === 'Drizzle'
+      );
+      rainChance = Math.round((rainyPeriods.length / next24Hours.length) * 100);
+    }
+
+    const result = {
+      success: true,
+      temperature: Math.round(weatherData.main.temp),
+      humidity: weatherData.main.humidity,
+      rainChance: rainChance,
+      wind: Math.round(weatherData.wind.speed * 3.6), // Convert m/s to km/h
+      condition: weatherData.weather[0].description,
+      latitude,
+      longitude,
+    };
 
     return new Response(
-      JSON.stringify({
-        temp: json.main.temp,
-        humidity: json.main.humidity,
-        wind: json.wind.speed,
-        weather: json.weather[0].description,
-      }),
+      JSON.stringify(result),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   } catch (err) {
-    return new Response(JSON.stringify({ error: err.message }), {
+    return new Response(JSON.stringify({ 
+      success: false,
+      error: err.message 
+    }), {
       status: 400,
-      headers: { ...corsHeaders },
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }
 });

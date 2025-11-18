@@ -1,10 +1,28 @@
 # AgriSmart - Smart Agriculture Monitoring Platform
 
 ## Overview
-AgriSmart is a comprehensive smart agriculture monitoring platform that helps farmers monitor crop health, predict irrigation needs, and detect diseases using satellite data, weather APIs, and AI analysis.
+AgriSmart is a comprehensive smart agriculture AI system that helps farmers monitor crop health with real-time sensor data, satellite imagery, weather information, and AI-powered recommendations in multiple languages (English/Telugu).
 
-**Current Status:** Application is running and accessible
+**Current Status:** Complete Smart Agriculture AI System with IoT Integration
 **Last Updated:** November 18, 2025
+
+## 🚀 Latest Update: Smart Agriculture AI System
+Complete multilingual AI system with:
+- ✅ ESP32 IoT sensor integration (NPK, pH, moisture, temperature, humidity)
+- ✅ Supabase database and Edge Functions
+- ✅ Real-time weather data (OpenWeather API)
+- ✅ Satellite NDVI crop health monitoring (SentinelHub)
+- ✅ AI-powered recommendations with OnSpace AI
+- ✅ Bilingual support: English & Telugu (తెలుగు)
+- ✅ Color-coded status indicators (green/yellow/red)
+- ✅ Farmer-friendly simple language
+
+## ⚙️ Setup Instructions
+See `SETUP_GUIDE.md` for complete setup instructions including:
+- Supabase database configuration
+- Edge Functions deployment  
+- Environment variables setup
+- ESP32 firmware configuration
 
 ## Project Architecture
 
@@ -24,6 +42,7 @@ AgriSmart is a comprehensive smart agriculture monitoring platform that helps fa
 src/
 ├── components/
 │   ├── dashboard/          # Dashboard-specific components
+│   │   ├── SmartAgriAI.tsx       # NEW: Complete AI system with language support
 │   │   ├── AIRecommendations.tsx
 │   │   ├── CropHealthAnalyzer.tsx
 │   │   ├── IrrigationRecommendations.tsx
@@ -32,15 +51,31 @@ src/
 │   │   └── WeatherMonitoring.tsx
 │   ├── layout/             # Layout components
 │   │   └── Header.tsx
+│   ├── LanguageSelector.tsx      # NEW: English/Telugu switcher
 │   └── ui/                 # Reusable UI components (shadcn/ui)
 ├── pages/
 │   ├── Dashboard.tsx
 │   ├── Index.tsx
 │   └── NotFound.tsx
 ├── hooks/
+│   ├── useSmartAgriData.ts       # NEW: Unified data fetching hook
+│   ├── useAgriAI.ts              # NEW: AI recommendations hook
 │   └── use-mobile.tsx
+├── lib/
+│   └── supabase.ts               # Supabase client
 ├── App.tsx
 └── main.tsx
+
+supabase/
+├── functions/
+│   ├── iot-upload/         # NEW: ESP32 data ingestion
+│   ├── satellite-ndvi/     # NEW: SentinelHub NDVI API
+│   └── weather-data/       # UPDATED: Enhanced weather API
+└── migrations/
+    └── 001_create_iot_readings.sql  # NEW: IoT database schema
+
+ESP32_AgriSmart/
+└── ESP32_AgriSmart.ino     # NEW: Arduino firmware for sensors
 ```
 
 ## Features
