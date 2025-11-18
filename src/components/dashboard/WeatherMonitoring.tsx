@@ -65,14 +65,22 @@ export default function WeatherMonitoring() {
   }
 
   if (error) {
+    const isConfigError = error.message.includes('fetch') || error.message.includes('Supabase');
     return (
       <Card className="data-card">
         <CardHeader>
           <CardTitle>Weather Monitoring</CardTitle>
+          <CardDescription>
+            {isConfigError ? 'Configuration required' : 'Error loading weather'}
+          </CardDescription>
         </CardHeader>
         <CardContent>
-          <Alert variant="destructive">
-            <AlertDescription>Error loading weather: {error.message}</AlertDescription>
+          <Alert variant={isConfigError ? "default" : "destructive"}>
+            <AlertDescription>
+              {isConfigError 
+                ? '⚙️ Please configure Supabase credentials in .env file to enable weather monitoring. See QUICKSTART.md for setup instructions.'
+                : `Error loading weather: ${error.message}`}
+            </AlertDescription>
           </Alert>
         </CardContent>
       </Card>

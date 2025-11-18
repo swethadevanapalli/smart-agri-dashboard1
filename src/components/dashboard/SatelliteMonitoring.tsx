@@ -43,6 +43,7 @@ export default function SatelliteMonitoring() {
   }
 
   if (error) {
+    const isConfigError = error.message.includes('fetch') || error.message.includes('Supabase');
     return (
       <Card className="data-card">
         <CardHeader>
@@ -52,13 +53,19 @@ export default function SatelliteMonitoring() {
             </div>
             <div>
               <CardTitle>Satellite Data Monitoring</CardTitle>
-              <CardDescription>Error loading NDVI data</CardDescription>
+              <CardDescription>
+                {isConfigError ? 'Configuration required' : 'Error loading NDVI data'}
+              </CardDescription>
             </div>
           </div>
         </CardHeader>
         <CardContent>
-          <Alert variant="destructive">
-            <AlertDescription>{error.message}</AlertDescription>
+          <Alert variant={isConfigError ? "default" : "destructive"}>
+            <AlertDescription>
+              {isConfigError 
+                ? '⚙️ Please configure Supabase credentials in .env file to enable satellite monitoring. See QUICKSTART.md for setup instructions.'
+                : error.message}
+            </AlertDescription>
           </Alert>
         </CardContent>
       </Card>
