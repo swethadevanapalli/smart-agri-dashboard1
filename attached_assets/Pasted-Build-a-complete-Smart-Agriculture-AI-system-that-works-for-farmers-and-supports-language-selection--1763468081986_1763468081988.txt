@@ -1,0 +1,105 @@
+Build a complete Smart Agriculture AI system that works for farmers and supports language selection (English or Telugu). All AI recommendations must be written in the language chosen by the user.
+
+The system must automatically use:
+1. REAL SENSOR DATA from ESP32 (NPK, pH, soil moisture, temperature, humidity, GPS)
+2. API DATA (weather + satellite NDVI) when sensors are missing or offline
+
+The system must always produce farmer-friendly, simple language instructions using color-coded status (green = good, yellow = needs attention, red = problem).
+
+PART 1 — Supabase Database
+Create a table “iot_readings” with:
+- id (uuid)
+- created_at (timestamp, default now)
+- n_value (float)
+- p_value (float)
+- k_value (float)
+- soil_ph (float)
+- soil_moisture (float)
+- temperature (float)
+- humidity (float)
+- latitude (float)
+- longitude (float)
+- ndvi (float)
+
+PART 2 — Edge Function “iot-upload”
+Accept POST data from ESP32. Insert available values into the table. Missing values should be ignored so the system works even with partial sensor data.
+
+PART 3 — Satellite NDVI
+Create an Edge Function “satellite-ndvi” using SentinelHub Process API (fast NDVI only). Return a simple NDVI score (0–1).
+
+PART 4 — Weather Data
+Create an Edge Function “weather-data” that accepts lat/lon and returns simple weather info:
+- Temperature
+- Humidity
+- Rain chance
+- Wind
+- Condition text
+
+PART 5 — ESP32 Firmware (Real Sensors + Simulation)
+Generate Arduino code for ESP32 that:
+- Connects to WiFi
+- Reads all real sensors if available (NPK, pH, soil moisture, DHT, GPS)
+- If sensors are not connected, generate simulated values in normal farm ranges
+- Sends data to “iot-upload” every 15 seconds
+- SIMULATION_MODE = true/false toggle
+
+PART 6 — Unified React Hook “useSmartAgriData()”
+Create a hook that:
+1. Fetches the latest IoT reading.
+2. If any reading is missing:
+   - Fetch weather-data
+   - Fetch satellite-ndvi
+3. Merge data into one clean dataset:
+{
+  n, p, k, ph, moisture,
+  temperature, humidity,
+  ndvi, latitude, longitude
+}
+
+PART 7 — AI Recommendation Hook “useAgriAI(data, language)”
+Create a function that sends merged data + language preference to OnSpace AI.
+
+AI must output a JSON object with these fields based on the selected language (English or Telugu):
+
+- fertilizer_plan (simple steps)
+- soil_advice (N, P, K, pH status)
+- irrigation (how much water, when, how often)
+- pest_warning (low / medium / high risk)
+- crop_health_status (healthy / improving / stress)
+- two_day_action_plan (bullet points)
+
+Important:  
+Use farmer-friendly simple sentences:
+Example English:
+“Your soil nitrogen is low. Add 20 kg urea per acre.”
+
+Example Telugu:
+“మీ నేలలో నైట్రోజన్ తక్కువగా ఉంది. ఎకరాకు 20 కిలోల యూరియా వేయండి.”
+
+PART 8 — Language Selection Component
+Create a simple React component that allows user to choose:
+- English
+- Telugu
+
+Store chosen language in state or context.
+
+PART 9 — Dashboard “SmartAgriAI.tsx”
+Create a clean, readable card that shows:
+
+- N, P, K with green/yellow/red status
+- Soil pH status (good / acidic / alkaline)
+- Soil moisture (dry / normal / wet)
+- Temperature & Humidity
+- NDVI crop health score (Healthy / Improving / Stress)
+- AI Recommendations in the selected language
+- 2-day action plan in bullet points
+
+Design rules:
+- Large readable text
+- Simple farmer-friendly words
+- Color-coded indicators
+- Telugu font should be clean and readable
+
+Place this card below weather and satellite sections in Dashboard.tsx.
+
+Make everything modular, clean, and easy to extend with more languages later.
