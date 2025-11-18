@@ -3,8 +3,11 @@
 ## Overview
 AgriSmart is a comprehensive smart agriculture AI system that helps farmers monitor crop health with real-time sensor data, satellite imagery, weather information, and AI-powered recommendations in multiple languages (English/Telugu).
 
-**Current Status:** Complete Smart Agriculture AI System with IoT Integration
+**Current Status:** ✅ Complete Smart Agriculture AI System Ready for Use
 **Last Updated:** November 18, 2025
+
+## 🚀 Quick Start
+See `QUICKSTART.md` for 3-step setup instructions!
 
 ## 🚀 Latest Update: Smart Agriculture AI System
 Complete multilingual AI system with:
