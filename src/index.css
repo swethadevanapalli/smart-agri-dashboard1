@@ -1,0 +1,79 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 120 20% 98%;
+    --foreground: 120 10% 10%;
+    --card: 0 0% 100%;
+    --card-foreground: 120 10% 10%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 120 10% 10%;
+    --primary: 142 76% 36%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 120 20% 90%;
+    --secondary-foreground: 120 10% 10%;
+    --muted: 120 20% 95%;
+    --muted-foreground: 120 8% 40%;
+    --accent: 85 85% 45%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 120 20% 88%;
+    --input: 120 20% 88%;
+    --ring: 142 76% 36%;
+    --radius: 0.75rem;
+  }
+
+  .dark {
+    --background: 120 15% 8%;
+    --foreground: 120 5% 95%;
+    --card: 120 12% 12%;
+    --card-foreground: 120 5% 95%;
+    --popover: 120 12% 10%;
+    --popover-foreground: 120 5% 95%;
+    --primary: 142 70% 45%;
+    --primary-foreground: 120 15% 8%;
+    --secondary: 120 10% 18%;
+    --secondary-foreground: 120 5% 95%;
+    --muted: 120 10% 20%;
+    --muted-foreground: 120 5% 65%;
+    --accent: 85 80% 50%;
+    --accent-foreground: 120 15% 8%;
+    --destructive: 0 72% 50%;
+    --destructive-foreground: 120 5% 95%;
+    --border: 120 10% 22%;
+    --input: 120 10% 22%;
+    --ring: 142 70% 45%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground font-['Inter',sans-serif];
+  }
+}
+
+@layer components {
+  .stat-card {
+    @apply bg-card border border-border rounded-lg p-6 shadow-sm hover:shadow-md transition-all duration-300;
+  }
+  
+  .gradient-text {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent;
+  }
+  
+  .section-title {
+    @apply text-2xl font-bold text-foreground mb-4;
+  }
+  
+  .data-card {
+    @apply bg-card border border-border rounded-xl p-6 shadow-sm hover:shadow-lg transition-all duration-300 hover:border-primary/30;
+  }
+}
